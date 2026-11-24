@@ -180,6 +180,20 @@
             font-weight: 500;
         }
 
+        .account-dropdown { position: relative; }
+        .account-dropdown summary { cursor: pointer; list-style: none; }
+        .account-dropdown summary::-webkit-details-marker { display: none; }
+        .account-dropdown summary:focus-visible { outline: 2px solid #facc15; outline-offset: 3px; }
+        .account-dropdown[open] summary { border-color: #facc15; }
+        .account-menu {
+            position: absolute; right: 0; top: calc(100% + 10px); z-index: 1000;
+            min-width: 190px; padding: 6px; background: #1b1e26;
+            border: 1px solid #2b303c; border-radius: 10px;
+            box-shadow: 0 12px 28px rgba(0,0,0,.25);
+        }
+        .account-menu a { display: block; padding: 11px 14px; color: #e2e8f0; border-radius: 6px; text-decoration: none; }
+        .account-menu a:hover, .account-menu a:focus-visible { background: #2b303c; color: #facc15; }
+
         .user-avatar {
             width: 26px;
             height: 26px;
@@ -620,11 +634,15 @@
             </div>
 
             <div class="nav-user">
-                <a href="{{ route('password.edit') }}" class="btn-logout">Change password</a>
-                <div class="user-pill">
+                <details class="account-dropdown" id="account-dropdown">
+                <summary class="user-pill" aria-label="Account options">
                     <span class="user-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}</span>
                     <span>{{ auth()->user()->name }}</span>
+                </summary>
+                <div class="account-menu">
+                    <a href="{{ route('password.edit') }}">Change Password</a>
                 </div>
+                </details>
                 <form class="inline" method="post" action="{{ route('logout') }}">
                     @csrf
                     <button class="btn-logout" type="submit">Sign out</button>
@@ -663,5 +681,17 @@
 
         @yield('content')
     </main>
+<script>
+    const accountDropdown = document.getElementById('account-dropdown');
+    document.addEventListener('click', event => {
+        if (!accountDropdown.contains(event.target)) accountDropdown.open = false;
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && accountDropdown.open) {
+            accountDropdown.open = false;
+            accountDropdown.querySelector('summary').focus();
+        }
+    });
+</script>
 </body>
 </html>
