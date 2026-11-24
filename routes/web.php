@@ -5,6 +5,8 @@ Route::redirect('/', '/dashboard');
 Route::middleware('guest')->group(function () { Route::get('/login',[AuthController::class,'create'])->name('login'); Route::post('/login',[AuthController::class,'store'])->name('login.store'); });
 Route::post('/logout',[AuthController::class,'destroy'])->middleware('auth')->name('logout');
 Route::middleware('auth')->group(function () {
+ Route::get('/account/password', [\App\Http\Controllers\PasswordController::class, 'edit'])->name('password.edit');
+ Route::put('/account/password', [\App\Http\Controllers\PasswordController::class, 'update'])->middleware('throttle:5,1')->name('password.update');
  Route::get('/dashboard',DashboardController::class)->name('dashboard'); Route::resource('members',MemberController::class); Route::patch('members/{member}/deactivate',[MemberController::class,'deactivate'])->name('members.deactivate'); Route::get('members/{member}/history',[MemberController::class,'history'])->name('members.history');
  Route::resource('categories',CategoryController::class)->except('show'); Route::resource('levels',LevelController::class)->except('show'); Route::resource('transactions',TransactionController::class)->except('destroy'); Route::patch('transactions/{transaction}/approve',[TransactionController::class,'approve'])->name('transactions.approve'); Route::resource('payments',PaymentController::class)->only(['index','create','store','show']); Route::get('transactions/{transaction}/receipt',[PaymentController::class,'receipt'])->name('transactions.receipt');
 });

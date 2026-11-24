@@ -620,6 +620,7 @@
             </div>
 
             <div class="nav-user">
+                <a href="{{ route('password.edit') }}" class="btn-logout">Change password</a>
                 <div class="user-pill">
                     <span class="user-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}</span>
                     <span>{{ auth()->user()->name }}</span>
