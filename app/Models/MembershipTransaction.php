@@ -1,0 +1,3 @@
+<?php
+namespace App\Models; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\{BelongsTo,HasMany};
+class MembershipTransaction extends Model { protected $fillable=['reference_number','member_id','membership_level_id','type','amount','status','processed_at','expires_at','notes','latitude','longitude']; protected function casts(): array { return ['amount'=>'decimal:2','processed_at'=>'datetime','expires_at'=>'date']; } public function member(): BelongsTo { return $this->belongsTo(Member::class); } public function level(): BelongsTo { return $this->belongsTo(MembershipLevel::class,'membership_level_id'); } public function payments(): HasMany { return $this->hasMany(Payment::class); } }
