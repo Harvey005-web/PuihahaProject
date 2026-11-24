@@ -13,7 +13,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY . .
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 COPY --from=assets /src/public/build ./public/build
-RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache && php artisan package:discover --ansi
+RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && find /app/bootstrap/cache -maxdepth 1 -type f -name '*.php' -delete \
+    && php artisan package:discover --ansi
 COPY Caddyfile /etc/caddy/Caddyfile
 ENV PORT=80
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+CMD ["sh", "/app/start.sh"]
