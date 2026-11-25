@@ -14,7 +14,9 @@ class MemberVerificationController extends Controller {
    if($fresh->email_verified_at)return;
    $token=Str::random(64);
    $fresh->forceFill(['email_verification_token'=>hash('sha256',$token)])->save();
-   $url=URL::temporarySignedRoute('members.verification.show',now()->addMinutes(60),['member'=>$fresh->id,'token'=>$token]);
+   // Sign the path and query so TLS termination cannot alter the signed data.
+   $path=URL::temporarySignedRoute('members.verification.show',now()->addMinutes(60),['member'=>$fresh->id,'token'=>$token],absolute:false);
+   $url=rtrim(config('app.url'),'/').$path;
    Notification::route('mail',$fresh->email)->notify(new VerifyMemberEmail($url));
   });
  }

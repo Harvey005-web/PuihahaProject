@@ -13,6 +13,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/weather', \App\Http\Controllers\WeatherController::class)->middleware(['auth','throttle:30,1'])->name('weather.show');
 
-Route::get('/member-email/verify/{member}/{token}',[\App\Http\Controllers\MemberVerificationController::class,'show'])->middleware(['signed','throttle:20,1'])->name('members.verification.show');
-Route::post('/member-email/verify/{member}/{token}',[\App\Http\Controllers\MemberVerificationController::class,'confirm'])->middleware(['signed','throttle:20,1'])->name('members.verification.confirm');
+Route::get('/member-email/verify/{member}/{token}',[\App\Http\Controllers\MemberVerificationController::class,'show'])->middleware(['signed:relative','throttle:20,1'])->name('members.verification.show');
+Route::post('/member-email/verify/{member}/{token}',[\App\Http\Controllers\MemberVerificationController::class,'confirm'])->middleware(['signed:relative','throttle:20,1'])->name('members.verification.confirm');
 Route::post('/members/{member}/verification-email',[\App\Http\Controllers\MemberVerificationController::class,'resend'])->middleware(['auth','throttle:3,1'])->name('members.verification.resend');

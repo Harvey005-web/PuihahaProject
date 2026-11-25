@@ -154,7 +154,7 @@
             </div>
             <h2>Verify your email address</h2>
             <p>Please confirm below to complete the verification of this email for your membership record.</p>
-            <form method="post" action="{{ request()->fullUrl() }}">
+            <form method="post" action="{{ request()->getRequestUri() }}">
                 @csrf
                 <button type="submit" class="btn">Confirm Email Verification</button>
             </form>
